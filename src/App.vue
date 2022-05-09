@@ -1,7 +1,6 @@
 <template>
-  <MainHeader :data="settings" @changeData="handleDataChange" :active="currentDataSource"/>
-  <TopPanel :dataSource="currentDataSource" />
-  <BottomPanel :dataSource="currentDataSource" />
+  <MainHeader />
+  <TopPanel />
   <MainFooter />
 </template>
 
@@ -9,51 +8,16 @@
 import MainHeader from './components/MainHeader.vue'
 import MainFooter from './components/MainFooter.vue'
 import TopPanel from './components/TopPanel.vue'
-import BottomPanel from './components/BottomPanel.vue'
 
 export default {
   components: {
     MainHeader,
     MainFooter,
     TopPanel,
-    BottomPanel,
   },
   data() {
     return {
-      settings: {
-        1: {
-          nazev: 'CNC 1',
-          id: 'SberDat03',
-          pracoviste: ['Haas VF-2SS', 'Haas VF-3SS vak.', 'Haas VF-3SS'],
-        },
-        2: {
-          nazev: 'CNC 2',
-          id: 'SberDat11',
-          pracoviste: ['Haas VF-3', 'Haas VF-6SS'],
-        },
-        3: {
-          nazev: 'Elumatec',
-          id: 'SberDat12',
-          pracoviste: ['Elumatec', 'SESTAVY', 'VSTUP', 'MEZI', 'VYSTUP']
-        },
-        4: {
-          nazev: '3D Meřák',
-          id: '',
-          pracoviste: ['3D MERENI', 'SESTAVY', 'ZAMECNICI']
-        },
-        5: {
-          nazev: 'Brusírna',
-          id: '',
-          pracoviste: ['BRUS', 'BRUSH']
-        },
-        6: {
-          nazev: 'Pila',
-          id: '',
-          pracoviste: ['']
-        }
-      },
-      currentDataSource: null,
-      testData: null,
+    
     }
   },
   methods: {

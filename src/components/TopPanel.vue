@@ -1,9 +1,6 @@
 <template>
     <div class="top-panel panel">
-        <div v-if="dataSource == null" class="error">
-            <p>Zvolte pracoviště z horního menu!</p>
-        </div>
-        <div v-else-if="dataLoading" class="loading">
+        <div v-if="dataLoading" class="loading">
             <div></div>
         </div>
         <table v-else class="data-wrapper">
@@ -11,6 +8,7 @@
                 <tr>
                     <th>Os. číslo</th>
                     <th>Jméno</th>
+                    <th>Příchod</th>
                     <th>Datum zahájení</th>
                     <th>Zahájeno (ks)</th>
                     <th>Průvodka</th>
@@ -22,6 +20,7 @@
                 <tr v-for="row,index in data" :key="index">
                     <td>{{row.OsCislo}}</td>
                     <td>{{row.Jmeno}}</td>
+                    <td>{{row.Prichod}}</td>
                     <td>{{row.Zahajeno}}</td>
                     <td>{{row.ZahMnozstvi}}</td>
                     <td>{{row.Plan}}</td>
@@ -45,9 +44,6 @@
 <script>
 import axios from 'axios'
 export default {
-    props: [
-        'dataSource',
-    ],
     data() {
         return {
             data: null,
@@ -56,13 +52,8 @@ export default {
             isScrollable: false
         }
     },
-    watch: {
-        dataSource: async function() {
-            await this.getData()
-            this.isScrollableFn()
-        }
-    },
     mounted() {
+        this.getData()
         setInterval( () => {
             if(this.dataSource) {
                 this.getData()
@@ -82,7 +73,7 @@ export default {
                     {
                         'id': 'PXQ72SBErpZST9nbB98EZMRRhAFvpC',
                         'typ': 0,
-                        'head': 'typUdalosti=10',
+                        'head': 'typUdalosti=30',
                         'items': []
                     },
                     {
@@ -92,13 +83,10 @@ export default {
                     },
                 )
                 this.data = response.data.payload
+                console.log(this.data);
             } catch(e) {
                 return e 
             }
-
-            this.data = this.data.filter(row => {
-                return row.IdZarizeni == this.dataSource.id && row.ZahMnozstvi > 0
-            })
             this.dataLoading = false
         },
         getPercentage(zahajeni, norma) {

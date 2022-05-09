@@ -5,28 +5,13 @@
         <a href="/">
             <img src="/img/tumaaero-logo.jpg" alt="TůmaAerospace s.r.o.">
         </a>
-        <nav class="main-menu">
-            <ul>
-                <li 
-                    v-for="item, index in data" 
-                    :key="index"
-                    @click.prevent="$emit('changeData', item)"
-                    :class="{ active: item == this.active}"
-                >
-                        {{item.nazev}}
-                </li>
-            </ul>
-        </nav>
+        <h1>Přítomní pracovníci</h1>
         <span class="timer">{{timestamp}}</span>
     </header>
 </template>
 
 <script>
 export default {
-    props: [
-        'data',
-        'active',
-    ],
     data() {
         return {
             timestamp: '',
@@ -61,21 +46,8 @@ export default {
     text-align: right;
   }
 }
-.main-menu ul {
-    display: flex;
-    flex-direction: row;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-transform: uppercase;
-    li {
-        padding: 0.5em;
-        cursor: pointer;
-        transition: all .3s ease-in;
-        &:hover, &:focus, &.active {
-            font-weight: 700;
-            transform: scale(1.1);
-        }
-    }
+h1 {
+    font-size: 1.5rem;
 }
+
 </style>
