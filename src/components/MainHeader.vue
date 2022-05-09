@@ -5,7 +5,7 @@
         <a href="/">
             <img src="/img/tumaaero-logo.jpg" alt="TůmaAerospace s.r.o.">
         </a>
-        <h1>Přítomní pracovníci</h1>
+        <h1>Neshody</h1>
         <span class="timer">{{timestamp}}</span>
     </header>
 </template>
@@ -39,7 +39,7 @@ export default {
   justify-content: space-between;
   padding: 1rem;
   border-radius: 10px;
-  background-color: rgba(#FFF, .5);
+  background-color: rgba(#FFF, .65);
   box-shadow: 15px 15px 35px rgba(#FFF, .2);
   .timer {
     min-width: 150px;

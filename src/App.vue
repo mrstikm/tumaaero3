@@ -53,9 +53,9 @@ body {
   width: 100%;
   overflow-y: auto;
   border-radius: 10px;
-  background-color: rgba(#FFF, .5);
+  background-color: rgba(#FFF, .65);
   box-shadow: 15px 15px 35px rgba(#FFF, .2);
-  padding: 1rem;
+  padding: 0 1rem 1rem;
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
   scrollbar-width: none;  /* Firefox */
   &::-webkit-scrollbar { 

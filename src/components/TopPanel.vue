@@ -4,37 +4,32 @@
             <div></div>
         </div>
         <table v-else class="data-wrapper">
-            <tbody>
+            <thead>
                 <tr>
                     <th>Os. číslo</th>
                     <th>Jméno</th>
-                    <th>Příchod</th>
-                    <th>Datum zahájení</th>
-                    <th>Zahájeno (ks)</th>
-                    <th>Průvodka</th>
-                    <th>Produkt</th>
-                    <th>Název produktu</th>
-                    <th>Operace</th>
-                    <th>Odpracováno</th>
+                    <th>Docházka (h)</th>
+                    <th>Norma (h)</th>
+                    <th>Výkon (h)</th>
+                    <th>Prostoje (h)</th>
+                    <th>Produktivita (%)</th>
+                    <th>Odčipováno (%)</th>
+                    <th>Suma neshod (Kč)</th>
+                    <th>Saldo docházky (h)</th>
                 </tr>
+            </thead>
+            <tbody>
                 <tr v-for="row,index in data" :key="index">
                     <td>{{row.OsCislo}}</td>
                     <td>{{row.Jmeno}}</td>
-                    <td>{{row.Prichod}}</td>
-                    <td>{{row.Zahajeno}}</td>
-                    <td>{{row.ZahMnozstvi}}</td>
-                    <td>{{row.Plan}}</td>
-                    <td>{{row.Produkt}}</td>
-                    <td>{{row.Nazev}}</td>
-                    <td>{{row.TextOperace}}</td>
-                    <td class="percentage">
-                        <div v-if="getPercentage(row.Zahajeno, row.Norma) <= 100" :style="{ background: 'linear-gradient(to right, green 0%, green ' + getPercentage(row.Zahajeno, row.Norma) + '%, transparent ' + getPercentage(row.Zahajeno, row.Norma) + '%)' }">
-                            {{getPercentage(row.Zahajeno, row.Norma)}}%
-                        </div>
-                        <div v-else :style="{ background: 'linear-gradient(to right, #b81818 0%, #b81818 ' + getPercentage(row.Zahajeno, row.Norma) + '%, transparent ' + getPercentage(row.Zahajeno, row.Norma) + '%)' }">
-                            {{getPercentage(row.Zahajeno, row.Norma)}}%
-                        </div>
-                    </td>
+                    <td>{{row.Dochazka}}</td>
+                    <td>{{row.Norma}}</td>
+                    <td>{{row.Vykon}}</td>
+                    <td>{{row.Prostoje}}</td>
+                    <td>{{getProduktivita(row)}}</td>
+                    <td>{{getOdcipovano(row)}}</td>
+                    <td>{{row.NeshodyKc}}</td>
+                    <td>{{row.SaldoDoch}}</td>
                 </tr>
             </tbody>
         </table>
@@ -48,24 +43,22 @@ export default {
         return {
             data: null,
             dataLoading: true,
-            direction: 'down',
-            isScrollable: false
+            direction: 'down'
         }
     },
     mounted() {
         this.getData()
         setInterval( () => {
-            if(this.dataSource) {
-                this.getData()
-            }
-        }, 60000)
-        if (this.isScrollable) {
-            setInterval( () => {
-                this.scrollTable()
-            }, 100)
-        }
+            this.getData()
+        }, 3600000)
     },
     methods: {
+        getProduktivita(row) {
+            return Math.round(row.Norma / (row.Dochazka - row.Prostoje) * 100)
+        },
+        getOdcipovano() {
+            return 0
+        },
         async getData() {
             try {
                 const response = await axios.post(
@@ -73,7 +66,7 @@ export default {
                     {
                         'id': 'PXQ72SBErpZST9nbB98EZMRRhAFvpC',
                         'typ': 0,
-                        'head': 'typUdalosti=30',
+                        'head': 'typUdalosti=40',
                         'items': []
                     },
                     {
@@ -82,24 +75,14 @@ export default {
                         'charset': 'utf-8', 
                     },
                 )
-                this.data = response.data.payload
-                console.log(this.data);
+                this.data = await response.data.payload
+                setInterval( () => {
+                    this.scrollTable()
+                }, 100)
             } catch(e) {
                 return e 
             }
             this.dataLoading = false
-        },
-        getPercentage(zahajeni, norma) {
-            zahajeni = new Date(zahajeni)
-            let aktual = new Date()
-
-            zahajeni = Date.parse(zahajeni)/1000/60
-            aktual = Date.parse(aktual)/1000/60
-            return Math.round((100*(aktual - zahajeni)) / (norma))
-        },
-        isScrollableFn() {
-            let table = document.querySelector('.top-panel')
-            if (table.scrollTopMax > 0) this.isScrollable = true
         },
         scrollTable() {
             let table = document.querySelector('.top-panel')
@@ -130,5 +113,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #FFF;
+}
 </style>
