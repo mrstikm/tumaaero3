@@ -53,7 +53,7 @@ body {
   width: 100%;
   overflow-y: auto;
   border-radius: 10px;
-  background-color: rgba(#FFF, .65);
+  background-color: rgba(#FFF, .7);
   box-shadow: 15px 15px 35px rgba(#FFF, .2);
   padding: 0 1rem 1rem;
   -ms-overflow-style: none;  /* Internet Explorer 10+ */

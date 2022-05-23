@@ -46,11 +46,15 @@ export default {
             direction: 'down'
         }
     },
-    mounted() {
-        this.getData()
-        setInterval( () => {
-            this.getData()
+    async mounted() {
+        this.data = await this.getData()
+        this.dataLoading = false
+        setInterval( async () => {
+            this.data = await this.getData()
         }, 3600000)
+        setInterval( () => {
+            this.scrollTable()
+        }, 100)
     },
     methods: {
         getProduktivita(row) {
@@ -60,29 +64,27 @@ export default {
             return 0
         },
         async getData() {
-            try {
-                const response = await axios.post(
-                    'http://192.168.100.3:8080/sendPost2/PXQ72SBErpZST9nbB98EZMRRhAFvpC',
-                    {
-                        'id': 'PXQ72SBErpZST9nbB98EZMRRhAFvpC',
-                        'typ': 0,
-                        'head': 'typUdalosti=40',
-                        'items': []
-                    },
-                    {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'charset': 'utf-8', 
-                    },
-                )
-                this.data = await response.data.payload
-                setInterval( () => {
-                    this.scrollTable()
-                }, 100)
-            } catch(e) {
-                return e 
-            }
-            this.dataLoading = false
+            return new Promise( async (resolve, reject) => {
+                try {
+                    const response = await axios.post(
+                        'http://192.168.100.3:8080/sendPost2/PXQ72SBErpZST9nbB98EZMRRhAFvpC',
+                        {
+                            'id': 'PXQ72SBErpZST9nbB98EZMRRhAFvpC',
+                            'typ': 0,
+                            'head': 'typUdalosti=40',
+                            'items': []
+                        },
+                        {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'charset': 'utf-8', 
+                        },
+                    )
+                    resolve(response.data.payload)
+                } catch(e) {
+                    reject(e) 
+                }
+            })
         },
         scrollTable() {
             let table = document.querySelector('.top-panel')
